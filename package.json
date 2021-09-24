@@ -1,0 +1,25 @@
+{
+  "name": "alpine-breakpoints",
+  "version": "1.0.1",
+  "description": "Alpine v3.x breakpoint directive",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "unpkg": "dist/index.min.js",
+  "scripts": {
+    "build": "node ./build --production",
+    "dev": "node ./build --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whiterussianstudio/alpine-breakpoints.git"
+  },
+  "author": "Pasha Frolov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/whiterussianstudio/alpine-breakpoints/issues"
+  },
+  "homepage": "https://github.com/whiterussianstudio/alpine-breakpoints#readme",
+  "dependencies": {
+    "esbuild": "^0.12.28"
+  }
+}
