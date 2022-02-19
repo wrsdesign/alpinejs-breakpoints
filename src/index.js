@@ -1,41 +1,42 @@
-import isBreakpoint from './isBreakpoint'
-import getCurrentMediaQuery from './getCurrentMediaQuery'
+import isBreakpoint, { getCurrentMediaQuery } from './isBreakpoint'
 
 export default (Alpine) => {
+  const data = Alpine.reactive({ currentMediaQuery: getCurrentMediaQuery() })
+  let update
+
+  const onResize = () => {
+    clearTimeout(update)
+
+    update = setTimeout(() => {
+      const comingMediaQuery = getCurrentMediaQuery()
+      if (comingMediaQuery !== data.currentMediaQuery) {
+        data.currentMediaQuery = comingMediaQuery
+      }
+    }, 150)
+  }
+
+  window.addEventListener('resize', onResize, false)
+
+  Alpine.magic('isBreakpoint', (el) => (breakpoint) => {
+    return isBreakpoint(breakpoint)
+  })
+
   Alpine.directive(
     'breakpoint',
-    (el, { value, modifiers, expression }, { evaluateLater, cleanup }) => {
-      let evaluate = evaluateLater(expression)
+    (
+      el,
+      { value, modifiers, expression },
+      { evaluateLater, effect, cleanup }
+    ) => {
+      const evaluate = evaluateLater(expression)
 
-      const checkBreakpoint = () => {
-        if (isBreakpoint(modifiers, value)) evaluate()
-      }
-
-      document.addEventListener('breakpoint:changed', checkBreakpoint)
-      checkBreakpoint()
+      effect(() => {
+        if (data.currentMediaQuery) evaluate()
+      })
 
       cleanup(() => {
-        document.removeEventListener('breakpoint:changed', checkBreakpoint)
+        window.removeEventListener('resize', onResize)
       })
     }
   )
 }
-;(() => {
-  let currentMediaQuery = getCurrentMediaQuery()
-  let rafid
-
-  const handleResize = () => {
-    if (rafid) window.cancelAnimationFrame(rafid)
-
-    rafid = window.requestAnimationFrame(() => {
-      const comingMediaQuery = getCurrentMediaQuery()
-
-      if (comingMediaQuery !== currentMediaQuery) {
-        document.dispatchEvent(new CustomEvent('breakpoint:changed'))
-        currentMediaQuery = comingMediaQuery
-      }
-    })
-  }
-
-  window.addEventListener('resize', handleResize)
-})()

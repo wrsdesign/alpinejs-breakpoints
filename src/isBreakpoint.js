@@ -1,35 +1,41 @@
-import getCurrentMediaQuery from './getCurrentMediaQuery'
+let getCurrentMediaQuery = () => {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue('--breakpoint')
+    .trim()
+    .replace(/['"]+/g, '')
+}
 
-const isBreakpoint = (modifiers, value) => {
-  const breakpointList = window.AlpineBreakpointPluginBreakpoints || [
+let isBreakpoint = (breakpoint) => {
+  if (!breakpoint) return false
+
+  const pattern = new RegExp('\\+$|\\-$')
+  const breakpointsList = window.AlpineBreakpointPluginBreakpointsList || [
     'unset',
     'xs',
     'sm',
     'md',
     'lg',
     'xl',
-    'xxl'
+    '2xl',
+    '3xl'
   ]
   const breakpointCurrent = getCurrentMediaQuery()
-  const breakpointCurrentIndex = breakpointList.indexOf(breakpointCurrent)
-  const breakpointIndex = breakpointList.indexOf(value)
+  const breakpointCurrentIndex = breakpointsList.indexOf(breakpointCurrent)
+  const hasModifier = pattern.exec(breakpoint)
+  const modifier = hasModifier ? hasModifier[0] : false
+  const breakpointName = hasModifier ? breakpoint.slice(0, -1) : breakpoint
+  const breakpointIndex = breakpointsList.indexOf(breakpointName)
 
-  if (breakpointIndex < 0) {
-    console.warn(
-      `Unrecognized breakpoint. Supported breakpoints are: ${breakpointList.join(
-        ', '
-      )}`
-    )
-    return false
-  }
+  if (breakpointIndex < 0) return false
 
-  return (
-    (modifiers.includes('above') &&
-      breakpointCurrentIndex >= breakpointIndex) ||
-    (modifiers.includes('below') &&
-      breakpointCurrentIndex <= breakpointIndex) ||
-    (!modifiers.length && value === breakpointCurrent)
+  if (
+    (modifier === '+' && breakpointCurrentIndex >= breakpointIndex) ||
+    (modifier === '-' && breakpointCurrentIndex <= breakpointIndex) ||
+    (!modifier && breakpoint === breakpointCurrent)
   )
+    return true
+
+  return false
 }
 
-export default isBreakpoint
+export { isBreakpoint as default, getCurrentMediaQuery }
