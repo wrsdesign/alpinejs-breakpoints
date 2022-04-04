@@ -14,6 +14,13 @@
     "url": "git+https://github.com/whiterussianstudio/alpine-breakpoints.git"
   },
   "author": "Pasha Frolov",
+  "keywords": [
+    "alpinejs",
+    "alpine",
+    "plugin",
+    "breakpoint",
+    "responsive"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/whiterussianstudio/alpine-breakpoints/issues"
