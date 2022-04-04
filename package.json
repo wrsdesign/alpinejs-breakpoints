@@ -1,7 +1,7 @@
 {
   "name": "alpinejs-breakpoints",
-  "version": "2.0.0",
-  "description": "Alpine v3.x breakpoint directive",
+  "version": "2.1.0",
+  "description": "Alpine v3.x breakpoints plugin",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "unpkg": "dist/index.min.js",
