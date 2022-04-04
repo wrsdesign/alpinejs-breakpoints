@@ -2,7 +2,6 @@
 A [Alpine.js](https://alpinejs.dev/) plugin and magic method that helps components respond to 📱 💻 🖥 breakpoint changes.
 
 ## Installation
----
 ### CDN
 
 You can include the CDN build of this plugin as a `<script>` tag, just make sure to include it before Alpinejs file.
